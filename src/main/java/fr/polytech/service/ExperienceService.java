@@ -7,7 +7,9 @@ import jakarta.ws.rs.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.UUID;
@@ -63,6 +65,8 @@ public class ExperienceService {
     public Experience createExperience(ExperienceDTO experience) {
         logger.info("Creating experience");
 
+        checkDates(experience);
+
         Experience newExperience = new Experience();
         newExperience.setCompanyId(experience.getCompanyId());
         newExperience.setJobTitle(experience.getJobTitle());
@@ -82,6 +86,8 @@ public class ExperienceService {
      */
     public Experience updateExperience(ExperienceDTO experience) throws NotFoundException {
         logger.info("Updating experience with id " + experience.getId());
+
+        checkDates(experience);
 
         Experience updatedExperience = experienceRepository.findById(experience.getId()).orElse(null);
 
@@ -119,5 +125,17 @@ public class ExperienceService {
 
         logger.debug("Deleting experience with id " + id);
         experienceRepository.delete(experience);
+    }
+
+    /**
+     * Check if the dates are valid.
+     *
+     * @param experience Experience to check.
+     * @throws HttpClientErrorException If the dates are not valid.
+     */
+    private void checkDates(ExperienceDTO experience) throws HttpClientErrorException {
+        if (experience.getStartDate().after(experience.getEndDate())) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Start date must be before end date");
+        }
     }
 }
