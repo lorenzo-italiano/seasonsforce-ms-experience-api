@@ -85,19 +85,18 @@ public class ExperienceController {
     /**
      * Update an experience.
      *
-     * @param id         Experience id.
      * @param experience Experience to update.
      * @return Updated experience.
      */
-    @PutMapping("/{id}")
+    @PutMapping("/")
     @PreAuthorize("hasRole('client_candidate')")
-    public ResponseEntity<Experience> updateExperience(@PathVariable("id") UUID id, @RequestBody ExperienceDTO experience) {
+    public ResponseEntity<Experience> updateExperience(@RequestBody ExperienceDTO experience) {
         try {
-            Experience updatedExperience = experienceService.updateExperience(id, experience);
-            logger.info("Updated experience with id " + id);
+            Experience updatedExperience = experienceService.updateExperience(experience);
+            logger.info("Updated experience with id " + experience.getId());
             return ResponseEntity.ok(updatedExperience);
         } catch (NotFoundException e) {
-            logger.error("Error while updating experience with id " + id + ": " + e.getMessage());
+            logger.error("Error while updating experience with id " + experience.getId() + ": " + e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }

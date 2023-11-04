@@ -76,15 +76,14 @@ public class ExperienceService {
     /**
      * Update an experience.
      *
-     * @param id         Experience id.
      * @param experience Experience to update.
      * @return Updated experience.
      * @throws NotFoundException If the experience is not found.
      */
-    public Experience updateExperience(UUID id, ExperienceDTO experience) throws NotFoundException {
-        logger.info("Updating experience with id " + id);
+    public Experience updateExperience(ExperienceDTO experience) throws NotFoundException {
+        logger.info("Updating experience with id " + experience.getId());
 
-        Experience updatedExperience = getExperienceById(id);
+        Experience updatedExperience = experienceRepository.findById(experience.getId()).orElse(null);
 
         if (updatedExperience == null) {
             logger.error("Error while updating an experience: experience not found");
