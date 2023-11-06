@@ -65,7 +65,7 @@ public class ExperienceService {
     public Experience createExperience(ExperienceDTO experience) {
         logger.info("Creating experience");
 
-        checkDates(experience);
+        checkAttributes(experience);
 
         Experience newExperience = new Experience();
         newExperience.setCompanyId(experience.getCompanyId());
@@ -87,7 +87,7 @@ public class ExperienceService {
     public Experience updateExperience(ExperienceDTO experience) throws NotFoundException {
         logger.info("Updating experience with id " + experience.getId());
 
-        checkDates(experience);
+        checkAttributes(experience);
 
         Experience updatedExperience = experienceRepository.findById(experience.getId()).orElse(null);
 
@@ -104,6 +104,21 @@ public class ExperienceService {
         updatedExperience.setEndDate(experience.getEndDate());
 
         return experienceRepository.save(updatedExperience);
+    }
+
+    /**
+     * Check if the experience has all the required attributes.
+     *
+     * @param experience Experience to check.
+     * @throws HttpClientErrorException If the experience does not have all the required attributes.
+     */
+    private void checkAttributes(ExperienceDTO experience) throws HttpClientErrorException {
+        if (experience.getJobTitle() == null || experience.getCompanyId() == null || experience.getJobCategoryId() == null || experience.getStartDate() == null || experience.getEndDate() == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing attributes");
+        }
+        if (experience.getStartDate().after(experience.getEndDate())) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Start date must be before end date");
+        }
     }
 
     /**
@@ -125,17 +140,5 @@ public class ExperienceService {
 
         logger.debug("Deleting experience with id " + id);
         experienceRepository.delete(experience);
-    }
-
-    /**
-     * Check if the dates are valid.
-     *
-     * @param experience Experience to check.
-     * @throws HttpClientErrorException If the dates are not valid.
-     */
-    private void checkDates(ExperienceDTO experience) throws HttpClientErrorException {
-        if (experience.getStartDate().after(experience.getEndDate())) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Start date must be before end date");
-        }
     }
 }

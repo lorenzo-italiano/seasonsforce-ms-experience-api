@@ -3,11 +3,14 @@ package fr.polytech.restcontroller;
 import fr.polytech.model.Experience;
 import fr.polytech.model.ExperienceDTO;
 import fr.polytech.service.ExperienceService;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.Produces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +37,7 @@ public class ExperienceController {
      */
     @GetMapping("/")
     @PreAuthorize("hasRole('client_admin')")
+    @Produces(MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Experience>> getAllExperiences() {
         try {
             List<Experience> experiences = experienceService.getAllExperiences();
@@ -52,6 +56,7 @@ public class ExperienceController {
      * @return Experience with the specified id.
      */
     @GetMapping("/{id}")
+    @Produces(MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Experience> getExperienceById(@PathVariable("id") UUID id) {
         try {
             Experience experience = experienceService.getExperienceById(id);
@@ -71,6 +76,8 @@ public class ExperienceController {
      */
     @PostMapping("/")
     @PreAuthorize("hasRole('client_candidate')")
+    @Consumes(MediaType.APPLICATION_JSON_VALUE)
+    @Produces(MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Experience> createExperience(@RequestBody ExperienceDTO experience) {
         try {
             Experience createdExperience = experienceService.createExperience(experience);
@@ -90,6 +97,8 @@ public class ExperienceController {
      */
     @PutMapping("/")
     @PreAuthorize("hasRole('client_candidate')")
+    @Consumes(MediaType.APPLICATION_JSON_VALUE)
+    @Produces(MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Experience> updateExperience(@RequestBody ExperienceDTO experience) {
         try {
             Experience updatedExperience = experienceService.updateExperience(experience);
@@ -109,6 +118,7 @@ public class ExperienceController {
      */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('client_candidate')")
+    @Produces(MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Boolean> deleteExperience(@PathVariable("id") UUID id) {
         try {
             experienceService.deleteExperience(id);
