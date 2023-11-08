@@ -4,7 +4,6 @@ import fr.polytech.model.Experience;
 import fr.polytech.model.ExperienceDTO;
 import fr.polytech.service.ExperienceService;
 import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.Produces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.UUID;
@@ -43,7 +43,7 @@ public class ExperienceController {
             List<Experience> experiences = experienceService.getAllExperiences();
             logger.info("Got all experiences");
             return ResponseEntity.ok(experiences);
-        } catch (Exception e) {
+        } catch (HttpClientErrorException e) {
             logger.error("Error while getting all experiences: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -62,7 +62,7 @@ public class ExperienceController {
             Experience experience = experienceService.getExperienceById(id);
             logger.info("Got experience with id " + id);
             return ResponseEntity.ok(experience);
-        } catch (NotFoundException e) {
+        } catch (HttpClientErrorException e) {
             logger.error("Error while getting experience with id " + id + ": " + e.getMessage());
             return ResponseEntity.notFound().build();
         }
@@ -83,7 +83,7 @@ public class ExperienceController {
             Experience createdExperience = experienceService.createExperience(experience);
             logger.info("Created experience with id " + createdExperience.getId());
             return ResponseEntity.ok(createdExperience);
-        } catch (Exception e) {
+        } catch (HttpClientErrorException e) {
             logger.error("Error while creating experience: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -104,9 +104,9 @@ public class ExperienceController {
             Experience updatedExperience = experienceService.updateExperience(experience);
             logger.info("Updated experience with id " + experience.getId());
             return ResponseEntity.ok(updatedExperience);
-        } catch (NotFoundException e) {
+        } catch (HttpClientErrorException e) {
             logger.error("Error while updating experience with id " + experience.getId() + ": " + e.getMessage());
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(null, e.getStatusCode());
         }
     }
 
@@ -124,7 +124,7 @@ public class ExperienceController {
             experienceService.deleteExperience(id);
             logger.info("Deleted experience with id " + id);
             return new ResponseEntity<>(true, HttpStatus.OK);
-        } catch (NotFoundException e) {
+        } catch (HttpClientErrorException e) {
             logger.error("Error while deleting experience with id " + id + ": " + e.getMessage());
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
