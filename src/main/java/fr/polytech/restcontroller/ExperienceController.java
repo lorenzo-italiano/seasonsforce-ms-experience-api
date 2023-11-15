@@ -1,5 +1,7 @@
 package fr.polytech.restcontroller;
 
+import fr.polytech.annotation.IsAdmin;
+import fr.polytech.annotation.IsCandidate;
 import fr.polytech.model.Experience;
 import fr.polytech.model.ExperienceDTO;
 import fr.polytech.service.ExperienceService;
@@ -11,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -36,7 +37,7 @@ public class ExperienceController {
      * @return List of all experiences.
      */
     @GetMapping("/")
-    @PreAuthorize("hasRole('client_admin')")
+    @IsAdmin
     @Produces(MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Experience>> getAllExperiences() {
         try {
@@ -75,7 +76,7 @@ public class ExperienceController {
      * @return Created experience.
      */
     @PostMapping("/")
-    @PreAuthorize("hasRole('client_candidate')")
+    @IsCandidate
     @Consumes(MediaType.APPLICATION_JSON_VALUE)
     @Produces(MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Experience> createExperience(@RequestBody ExperienceDTO experience) {
@@ -96,7 +97,7 @@ public class ExperienceController {
      * @return Updated experience.
      */
     @PutMapping("/")
-    @PreAuthorize("hasRole('client_candidate')")
+    @IsCandidate
     @Consumes(MediaType.APPLICATION_JSON_VALUE)
     @Produces(MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Experience> updateExperience(@RequestBody ExperienceDTO experience) {
@@ -117,7 +118,7 @@ public class ExperienceController {
      * @return True if the experience has been deleted, false otherwise.
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('client_candidate')")
+    @IsCandidate
     @Produces(MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Boolean> deleteExperience(@PathVariable("id") UUID id) {
         try {
