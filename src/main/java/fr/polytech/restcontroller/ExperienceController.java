@@ -2,6 +2,7 @@ package fr.polytech.restcontroller;
 
 import fr.polytech.annotation.IsAdmin;
 import fr.polytech.annotation.IsCandidate;
+import fr.polytech.annotation.IsCandidateOrUserManager;
 import fr.polytech.model.Experience;
 import fr.polytech.model.ExperienceDTO;
 import fr.polytech.service.ExperienceService;
@@ -76,7 +77,7 @@ public class ExperienceController {
      * @return Created experience.
      */
     @PostMapping("/")
-    @IsCandidate
+    @IsCandidateOrUserManager
     @Consumes(MediaType.APPLICATION_JSON_VALUE)
     @Produces(MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Experience> createExperience(@RequestBody ExperienceDTO experience) {
