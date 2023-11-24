@@ -1,7 +1,6 @@
 package fr.polytech.service;
 
-import fr.polytech.model.Experience;
-import fr.polytech.model.ExperienceDTO;
+import fr.polytech.model.*;
 import fr.polytech.repository.ExperienceRepository;
 import jakarta.ws.rs.NotFoundException;
 import org.slf4j.Logger;
@@ -24,6 +23,12 @@ public class ExperienceService {
 
     @Autowired
     private ExperienceRepository experienceRepository;
+
+    @Autowired
+    private CompanyService companyService;
+
+    @Autowired
+    private JobCategoryService jobCategoryService;
 
     /**
      * Get all experiences.
@@ -140,5 +145,44 @@ public class ExperienceService {
 
         logger.debug("Deleting experience with id " + id);
         experienceRepository.delete(experience);
+    }
+
+    public DetailedExperienceDTO getDetailedExperienceById(UUID id, String token) {
+        Experience experience = getExperienceById(id);
+
+        if (experience == null) {
+            logger.error("Error while getting an experience: experience not found");
+            // If the experience is not found, throw an exception
+            throw new NotFoundException("Experience not found");
+        }
+
+        DetailedExperienceDTO detailedExperience = new DetailedExperienceDTO();
+
+        detailedExperience.setId(experience.getId());
+        detailedExperience.setJobTitle(experience.getJobTitle());
+        detailedExperience.setStartDate(experience.getStartDate());
+        detailedExperience.setEndDate(experience.getEndDate());
+
+        CompanyDTO companyById = companyService.getCompanyById(experience.getCompanyId(), token);
+
+        if (companyById == null) {
+            logger.error("Error while getting a company: company not found");
+            // If the company is not found, throw an exception
+            throw new NotFoundException("Company not found");
+        }
+
+        detailedExperience.setCompany(companyById);
+
+        JobCategoryDTO jobCategoryById = jobCategoryService.getJobCategoryById(experience.getJobCategoryId(), token);
+
+        if (jobCategoryById == null) {
+            logger.error("Error while getting a job category: job category not found");
+            // If the job category is not found, throw an exception
+            throw new NotFoundException("Job category not found");
+        }
+
+        detailedExperience.setJobCategory(jobCategoryById);
+
+        return detailedExperience;
     }
 }

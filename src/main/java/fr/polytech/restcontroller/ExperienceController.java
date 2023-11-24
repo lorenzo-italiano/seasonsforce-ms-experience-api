@@ -3,6 +3,7 @@ package fr.polytech.restcontroller;
 import fr.polytech.annotation.IsAdmin;
 import fr.polytech.annotation.IsCandidate;
 import fr.polytech.annotation.IsCandidateOrUserManager;
+import fr.polytech.model.DetailedExperienceDTO;
 import fr.polytech.model.Experience;
 import fr.polytech.model.ExperienceDTO;
 import fr.polytech.service.ExperienceService;
@@ -62,6 +63,25 @@ public class ExperienceController {
     public ResponseEntity<Experience> getExperienceById(@PathVariable("id") UUID id) {
         try {
             Experience experience = experienceService.getExperienceById(id);
+            logger.info("Got experience with id " + id);
+            return ResponseEntity.ok(experience);
+        } catch (HttpClientErrorException e) {
+            logger.error("Error while getting experience with id " + id + ": " + e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * Get detailed experience by id.
+     *
+     * @param id Experience id.
+     * @return Experience with the specified id.
+     */
+    @GetMapping("/detailed/{id}")
+    @Produces(MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DetailedExperienceDTO> getDetailedExperienceById(@PathVariable("id") UUID id, @RequestHeader("Authorization") String token) {
+        try {
+            DetailedExperienceDTO experience = experienceService.getDetailedExperienceById(id, token);
             logger.info("Got experience with id " + id);
             return ResponseEntity.ok(experience);
         } catch (HttpClientErrorException e) {
