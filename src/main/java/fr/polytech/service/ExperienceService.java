@@ -45,16 +45,16 @@ public class ExperienceService {
      *
      * @param id Experience id.
      * @return Experience with the specified id.
-     * @throws NotFoundException If the experience is not found.
+     * @throws HttpClientErrorException If the experience is not found.
      */
-    public Experience getExperienceById(UUID id) throws NotFoundException {
+    public Experience getExperienceById(UUID id) throws HttpClientErrorException {
         logger.info("Getting experience with id " + id);
         Experience experience = experienceRepository.findById(id).orElse(null);
 
         if (experience == null) {
             logger.error("Error while getting an experience: experience not found");
             // If the experience is not found, throw an exception
-            throw new NotFoundException("Experience not found");
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Experience not found");
         }
 
         logger.debug("Returning experience with id " + id);
@@ -87,9 +87,9 @@ public class ExperienceService {
      *
      * @param experience Experience to update.
      * @return Updated experience.
-     * @throws NotFoundException If the experience is not found.
+     * @throws HttpClientErrorException If the experience is not found.
      */
-    public Experience updateExperience(ExperienceDTO experience) throws NotFoundException {
+    public Experience updateExperience(ExperienceDTO experience) throws HttpClientErrorException {
         logger.info("Updating experience with id " + experience.getId());
 
         checkAttributes(experience);
@@ -99,7 +99,7 @@ public class ExperienceService {
         if (updatedExperience == null) {
             logger.error("Error while updating an experience: experience not found");
             // If the experience is not found, throw an exception
-            throw new NotFoundException("Experience not found");
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Experience not found");
         }
 
         updatedExperience.setCompanyId(experience.getCompanyId());
