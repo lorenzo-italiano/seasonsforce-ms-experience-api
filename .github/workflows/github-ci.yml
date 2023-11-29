@@ -17,7 +17,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '20'
-        distribution: 'corretto' # Utilise Amazon Corretto
+        distribution: 'corretto'
 
     - name: Cache Maven packages
       uses: actions/cache@v3
