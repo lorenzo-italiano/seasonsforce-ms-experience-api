@@ -27,6 +27,9 @@ public class ExperienceServiceTest {
     @Autowired
     private ExperienceService experienceService;
 
+    /**
+     * Test that the method returns a list of experiences.
+     */
     @Test
     public void testGetAllExperiences() {
         experienceRepository.save(new Experience()); // Save some dummy data
@@ -37,6 +40,9 @@ public class ExperienceServiceTest {
         assertEquals(2, result.size());
     }
 
+    /**
+     * Test that the method returns an experience.
+     */
     @Test
     public void testGetExperienceById() {
         Experience savedExperience = experienceRepository.save(new Experience());
@@ -46,6 +52,9 @@ public class ExperienceServiceTest {
         assertEquals(savedExperience.getId(), result.getId());
     }
 
+    /**
+     * Test that the method throws an exception when the experience is not found.
+     */
     @Test
     public void testGetExperienceByIdWithInvalidId() {
         // Check that an exception is thrown with status code 404
@@ -53,6 +62,9 @@ public class ExperienceServiceTest {
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 
+    /**
+     * Test that the method creates an experience.
+     */
     @Test
     public void testCreateExperience() {
         ExperienceDTO experience = new ExperienceDTO();
@@ -72,6 +84,9 @@ public class ExperienceServiceTest {
         assertEquals(experience.getCompanyId(), result.getCompanyId());
     }
 
+    /**
+     * Test that the method throws an exception when the end date is before the start date.
+     */
     @Test
     public void testCreateExperienceWithEndDateBeforeStartDate() {
         ExperienceDTO experience = new ExperienceDTO();
@@ -90,6 +105,9 @@ public class ExperienceServiceTest {
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     }
 
+    /**
+     * Test that the method throws an exception when the experience does not have all the required attributes.
+     */
     @Test
     public void testCreateExperienceWithMissingAttributes() {
         ExperienceDTO experience = new ExperienceDTO();
@@ -103,6 +121,9 @@ public class ExperienceServiceTest {
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     }
 
+    /**
+     * Test that the method updates an experience.
+     */
     @Test
     public void testUpdateExperience() {
         Experience savedExperience = experienceRepository.save(new Experience());
@@ -124,6 +145,9 @@ public class ExperienceServiceTest {
         assertEquals(experience.getCompanyId(), result.getCompanyId());
     }
 
+    /**
+     * Test that the method throws an exception when the end date is before the start date.
+     */
     @Test
     public void testUpdateExperienceWithEndDateBeforeStartDate() {
         Experience savedExperience = experienceRepository.save(new Experience());
@@ -145,6 +169,9 @@ public class ExperienceServiceTest {
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     }
 
+    /**
+     * Test that the method throws an exception when the experience does not have all the required attributes.
+     */
     @Test
     public void testUpdateExperienceWithMissingAttributes() {
         Experience savedExperience = experienceRepository.save(new Experience());
@@ -161,6 +188,9 @@ public class ExperienceServiceTest {
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     }
 
+    /**
+     * Test that the method throws an exception when the experience is not found.
+     */
     @Test
     public void testUpdateExperienceWithInvalidId() {
         ExperienceDTO experience = new ExperienceDTO();
@@ -180,6 +210,9 @@ public class ExperienceServiceTest {
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 
+    /**
+     * Test that the method deletes an experience.
+     */
     @Test
     public void testDeleteExperience() {
         Experience savedExperience = experienceRepository.save(new Experience());

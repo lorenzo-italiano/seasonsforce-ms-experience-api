@@ -147,6 +147,13 @@ public class ExperienceService {
         experienceRepository.delete(experience);
     }
 
+    /**
+     * Get a detailed experience by id.
+     *
+     * @param id    Experience id.
+     * @param token Token of the user.
+     * @return Detailed experience with the specified id.
+     */
     public DetailedExperienceDTO getDetailedExperienceById(UUID id, String token) {
         Experience experience = getExperienceById(id);
 

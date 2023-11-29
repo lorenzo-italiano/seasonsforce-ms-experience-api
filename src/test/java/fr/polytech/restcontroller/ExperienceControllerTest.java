@@ -35,6 +35,11 @@ public class ExperienceControllerTest {
     @MockBean
     private ExperienceService experienceService;
 
+    /**
+     * Test that the endpoint returns a 200 status code.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     @WithMockUser
     public void testGetAllExperiences() throws Exception {
@@ -43,6 +48,11 @@ public class ExperienceControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Test that the endpoint returns a 200 status code.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     @WithMockUser
     public void testGetExperienceById() throws Exception {
@@ -52,6 +62,11 @@ public class ExperienceControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Test that the endpoint returns a 200 status code.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     @WithMockUser
     public void testCreateExperience() throws Exception {
@@ -77,6 +92,11 @@ public class ExperienceControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Test that the endpoint returns a 200 status code.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     @WithMockUser
     public void testUpdateExperience() throws Exception {
@@ -91,6 +111,11 @@ public class ExperienceControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Test that the endpoint returns a 200 status code.
+     *
+     * @throws Exception If an error occurs
+     */
     @Test
     @WithMockUser
     public void testDeleteExperience() throws Exception {

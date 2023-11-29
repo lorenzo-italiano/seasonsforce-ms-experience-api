@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
 
@@ -20,7 +19,11 @@ public class JobCategoryService {
     private ApiService apiService;
 
     /**
-     * Get a Job Category by id.
+     * Get job category by id.
+     * @param id Job category id
+     * @param token Access token
+     * @return Job category with the specified id
+     * @throws HttpClientErrorException if an error occurs while calling the API
      */
     public JobCategoryDTO getJobCategoryById(UUID id, String token) throws HttpClientErrorException {
         String uri = System.getenv("JOB_CATEGORY_API_URI") + "/" + id;
